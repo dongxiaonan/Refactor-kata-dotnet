@@ -9,51 +9,34 @@ namespace Kata.Refactor.Before
         
         public List<string> Filter(IList<string> marks, bool isGoldenKey)
         {
-            var keys = new List<string>();
 
             if (marks == null || marks.Count == 0)
             {
-                return keys;
+                return new List<string>();
             }
 
+            var markList = new MarkList(marks);
+
+            return markList.Filter(isGoldenKey, GetSavedMarkList(isGoldenKey))
+                .Select(x => x.Convert())
+                .ToList();
+        }
+
+        private MarkList GetSavedMarkList(bool isGoldenKey)
+        {
             if (isGoldenKey)
             {
-                var goldenKey = SessionService.Get<List<string>>("GoldenKey");
-                
-                keys.AddRange(goldenKey);
-
-                marks = ValidateGoldenKeys(marks);
-            }
-            else
-            {
-                var SilverKeys = SessionService.Get<List<string>>("SilverKey");
-                var CopperKeys = SessionService.Get<List<string>>("CopperKey");
-                
-                keys.AddRange(SilverKeys);
-                keys.AddRange(CopperKeys);
-            }
-            
-            return marks.Where(mark => keys.Contains(mark) || IsFakeKey(mark)).ToList();
-        }
-
-        private IList<string> ValidateGoldenKeys(IList<string> marks)
-        {
-            var golden02Mark = marks.Where(x => x.StartsWith("GD02")).ToList();
-            
-            foreach (var mark in golden02Mark)
-            {
-                if (!marks.Any(x => x.StartsWith("GD01") && mark.Substring(4, 6).Equals(x.Substring(4, 6))))
-                {
-                    marks.Remove(mark);
-                }
+                return new MarkList(SessionService.Get<List<string>>("GoldenKey").ToList());
             }
 
-            return marks;
-        }
+            var keys = new List<string>();
+            var SilverKeys = SessionService.Get<List<string>>("SilverKey");
+            var CopperKeys = SessionService.Get<List<string>>("CopperKey");
 
-        private bool IsFakeKey(string mark)
-        {
-            return mark.EndsWith("FAKE");
+            keys.AddRange(SilverKeys);
+            keys.AddRange(CopperKeys);
+
+            return new MarkList(keys);
         }
     }
 
