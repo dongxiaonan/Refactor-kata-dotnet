@@ -5,7 +5,7 @@ namespace Kata.Refactor.Before
 {
     public class KeysFilter
     {
-        private ISessionService SessionService { get; set; }
+        public ISessionService SessionService { get; set; }
         
         public List<string> Filter(IList<string> marks, bool isGoldenKey)
         {
@@ -38,7 +38,7 @@ namespace Kata.Refactor.Before
 
         private IList<string> ValidateGoldenKeys(IList<string> marks)
         {
-            var golden02Mark = marks.Where(x => x.StartsWith("GD02"));
+            var golden02Mark = marks.Where(x => x.StartsWith("GD02")).ToList();
             
             foreach (var mark in golden02Mark)
             {
