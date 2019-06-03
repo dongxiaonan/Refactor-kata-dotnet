@@ -19,7 +19,7 @@ namespace Kata.Refactor.Before
             return _mark.StartsWith("GD02");
         }
 
-        public bool IsValidateGoldenMark(Mark mark)
+        public bool IsValidateGoldenTwoMark(Mark mark)
         {
             return IsGoldenOne() && HasSameKeyWithGoldenOne(mark);
         }

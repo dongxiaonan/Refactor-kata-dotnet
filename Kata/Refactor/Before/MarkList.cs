@@ -19,22 +19,14 @@ namespace Kata.Refactor.Before
                 return this;
             }
             
-            var golden02Mark = Marks.Where(x => x.IsGoldenTwo()).ToList();
-            
-            foreach (var mark in golden02Mark)
-            {
-                if (!Validate(mark))
-                {
-                    Marks.Remove(mark);
-                }
-            }
+            Marks = Marks.Where(x => !x.IsGoldenTwo() || ValidateGoldenTwo(x)).ToList();
 
             return this;
         }
 
-        private bool Validate(Mark mark)
+        private bool ValidateGoldenTwo(Mark mark)
         {
-            return Marks.Any(x => x.IsValidateGoldenMark(mark));
+            return Marks.Any(x => x.IsValidateGoldenTwoMark(mark));
         }
 
         private List<Mark> FilterForSavedKeys(MarkList savedKeys)
