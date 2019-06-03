@@ -1,0 +1,6 @@
+refactor homework notes
+
+1. update the logic to ==null
+2. how to mock a private property in one class, without DI?
+3. System.InvalidOperationException : Collection was modified; enumeration operation may not execute. 
+在运行程序时遇到这样一段异常，仔细检查后发现是使用Foreach...In语法体内运用了对Collection的Remove或Add导致的，只需要将foreach方法改为for方法即可。
